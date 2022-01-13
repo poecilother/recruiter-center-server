@@ -1,7 +1,9 @@
+import 'dotenv/config';
+
 import App from './app';
 import routes from './routes';
 
-const port: number = parseInt(process.env.PORT) || 4455;
+const port: number = parseInt(process.env.PORT) || 4000;
 const app = new App(port, routes);
 
 app.listen();
