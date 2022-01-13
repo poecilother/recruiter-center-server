@@ -1,5 +1,6 @@
 import express from 'express';
-import Database from './models';
+import Container from 'typedi';
+import Database from './models/database';
 
 class App {
   private app: express.Application;
@@ -15,7 +16,7 @@ class App {
   }
 
   private connectToDatabase() {
-    const database = new Database();
+    const database = Container.get(Database);
 
     database.connect();
   }
