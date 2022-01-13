@@ -1,15 +1,23 @@
 import express from 'express';
+import Database from './models';
 
 class App {
-  public app: express.Application;
-  public port: number;
+  private app: express.Application;
+  private port: number;
 
   constructor(port: number, routes: express.Router) {
     this.app = express();
     this.port = port;
 
+    this.connectToDatabase();
     this.runMiddleware();
     this.runRoutes(routes);
+  }
+
+  private connectToDatabase() {
+    const database = new Database();
+
+    database.connect();
   }
 
   private runMiddleware() {
