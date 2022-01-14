@@ -1,23 +1,26 @@
 import express from 'express';
 import Container from 'typedi';
 import Database from './models/database';
+import AppRouter from './routes';
 
 class App {
   private app: express.Application;
   private port: number;
+  private database: Database;
+  private appRouter: AppRouter;
 
-  constructor(port: number, routes: express.Router) {
+  constructor(port: number) {
     this.app = express();
     this.port = port;
+    this.database = Container.get(Database);
+    this.appRouter = Container.get(AppRouter)
 
-    this.connectToDatabase();
+    this.connectToDatabase(this.database);
     this.runMiddleware();
-    this.runRoutes(routes);
+    this.runRoutes(this.appRouter);
   }
 
-  private connectToDatabase() {
-    const database = Container.get(Database);
-
+  private connectToDatabase(database: Database) {
     database.connect();
   }
 
@@ -26,8 +29,8 @@ class App {
     this.app.use(express.json());
   }
 
-  private runRoutes(routes: express.Router) {
-    this.app.use('/', routes);
+  private runRoutes(router: AppRouter) {
+    this.app.use('/', router.getRouter());
   }
 
   public listen() {

@@ -13,6 +13,7 @@ function UserModel(sequelize: Sequelize) {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -20,7 +21,7 @@ function UserModel(sequelize: Sequelize) {
     },
     status: { //? 0 - inactive, 1 - active, 2 - banned
       type: DataTypes.INTEGER,
-      defaultValue: 0
+      defaultValue: 1
     },
     lastLogin: {
       type: DataTypes.DATE,
