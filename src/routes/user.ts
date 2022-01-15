@@ -18,6 +18,7 @@ class UserRouter {
 
   private setRoutes() {
     this.router.post('/register', this.userMiddleware.registerUserValidation, this.userController.registerUser);
+    this.router.post('/login', this.userController.loginUser);
   }
 
   public getRouter() {

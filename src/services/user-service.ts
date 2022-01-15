@@ -1,39 +1,57 @@
 import { Service } from 'typedi';
-import models from '../models';
-import { User } from '../interfaces';
+import { User } from '../models'
+import { UserInterface } from '../interfaces';
 
 @Service()
 export class UserService {
   public async getUserByEmail(email: string) {
     try {
-      return await models.User.findOne({ where: { email } });
+      return await User.findOne({ where: { email } });
     } catch (err) {
-      console.error('Sequelize ERROR in UserService getUserByEmail() models.User.findOne(): ', err);
+      console.error('Sequelize ERROR in UserService getUserByEmail() User.findOne(): ', err);
       throw err;
     }
   }
 
-  public async registerUser(user: User): Promise<ResponseUser> {
+  public async registerUser(user: UserInterface): Promise<ResponseUser> {
     try {
-      const registeredUser = await models.User.create(user);
+      const registeredUser = await User.create(user);
       return new ResponseUser(
-        registeredUser.getDataValue('id'),
-        registeredUser.getDataValue('email'),
-        registeredUser.getDataValue('createdAt')
+        registeredUser.id,
+        registeredUser.email,
+        registeredUser.createdAt
       );
     } catch (err) {
-      console.error('Sequelize ERROR in UserService register() models.User.create(): ', err);
+      console.error('Sequelize ERROR in UserService registerUser() User.create(): ', err);
       throw err;
     }
+  }
+
+  public async loginUser(user: UserInterface) {
+    let userId: string;
+
+    try {
+      const loggedUser = await User.findOne({ where: { email: user.email }});
+
+      if (!loggedUser) return false;
+      if (!await loggedUser.verifyPassword(user.password)) return false;
+
+      userId = loggedUser.id;
+    } catch (err) {
+      console.error('Sequelize ERROR in UserService loginUser(): ', err);
+      throw err;
+    }
+
+    
   }
 }
 
 class ResponseUser {
   private id: string;
   private email: string;
-  private createdAt: string;
+  private createdAt: Date;
 
-  constructor(id: string, email: string, createdAt: string) {
+  constructor(id: string, email: string, createdAt: Date) {
     this.id = id;
     this.email = email;
     this.createdAt = createdAt;

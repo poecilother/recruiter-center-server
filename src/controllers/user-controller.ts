@@ -7,6 +7,7 @@ import { ResponseMessage, ResponseStatus } from '../resources';
 export class UserController {
   constructor(private userService: UserService) {
     this.registerUser = this.registerUser.bind(this);
+    this.loginUser = this.loginUser.bind(this);
   }
 
   public async registerUser(req: Request, res: Response) {
@@ -18,5 +19,10 @@ export class UserController {
       console.error('ERROR in UserContoller registerUser(): ', err);
       return res.status(ResponseStatus.INTERNAL_SERVER).send(ResponseMessage.general.error);
     }
+  }
+
+  public async loginUser(req: Request, res: Response) {
+    const { user } = req.body;
+    return res.send(await this.userService.loginUser(user));
   }
 }
