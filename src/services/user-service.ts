@@ -1,9 +1,12 @@
 import { Service } from 'typedi';
 import { User } from '../models'
 import { UserInterface } from '../interfaces';
+import { TokenService } from './token-service';
 
 @Service()
 export class UserService {
+  constructor(private tokenService: TokenService) {}
+
   public async getUserByEmail(email: string) {
     try {
       return await User.findOne({ where: { email } });
@@ -42,7 +45,7 @@ export class UserService {
       throw err;
     }
 
-    
+    return this.tokenService.getAccessToken(userId);
   }
 }
 

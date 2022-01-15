@@ -12,6 +12,7 @@ export class UserController {
 
   public async registerUser(req: Request, res: Response) {
     const { user } = req.body;
+    
     try {
       const registeredUser = await this.userService.registerUser(user);
       return res.status(ResponseStatus.CREATED).send(registeredUser);
@@ -23,6 +24,14 @@ export class UserController {
 
   public async loginUser(req: Request, res: Response) {
     const { user } = req.body;
-    return res.send(await this.userService.loginUser(user));
+
+    try {
+      const loggedUser = await this.userService.loginUser(user);
+      if (!loggedUser) return res.status(ResponseStatus.BAD_REQUEST).send(ResponseMessage.general.wrongCredentials);
+      return res.status(ResponseStatus.OK).send(loggedUser);
+    } catch (err) {
+      console.error('ERROR in UserContoller registerUser(): ', err);
+      return res.status(ResponseStatus.INTERNAL_SERVER).send(ResponseMessage.general.error);
+    }
   }
 }

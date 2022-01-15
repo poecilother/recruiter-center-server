@@ -1,6 +1,7 @@
 export const ResponseMessage = {
   general: {
     error: 'Something went wrong. Try again later.',
+    wrongCredentials: 'Wrong credentials provided.',
   },
 
   validation: {

@@ -41,4 +41,15 @@ export class UserMiddleware {
 
     next();
   }
+
+  public loginUserValidation(req: Request, res: Response, next: NextFunction) {
+    const userFields = ['email', 'password'];
+
+    if (GeneralValidation.isRequestBodyMissing(req))
+      return res.status(ResponseStatus.BAD_REQUEST).send(ResponseMessage.validation.missingParam('body'));
+    if (!GeneralValidation.checkObjectKeys(req.body.user, userFields))
+      return res.status(ResponseStatus.BAD_REQUEST).send(ResponseMessage.validation.invalidValue('user object', 'fields'));
+
+    next();
+  }
 }

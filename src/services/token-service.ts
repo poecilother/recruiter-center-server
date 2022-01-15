@@ -14,7 +14,10 @@ export class TokenService {
   }
 
   public getAccessToken(userId: string) {
-    return jwt.sign({ userId }, this.accessTokenCredentials.secret, { expiresIn: this.accessTokenCredentials.expiresIn });
+    return {
+      accessToken: jwt.sign({ userId }, this.accessTokenCredentials.secret, { expiresIn: this.accessTokenCredentials.expiresIn }),
+      expiresIn: parseInt(this.accessTokenCredentials.expiresIn)
+    }
   }
 
   public verifyAccessToken(accessToken: string) {
