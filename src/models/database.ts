@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { Service } from 'typedi';
+import { UserModel } from './user-model';
 
 @Service()
 class Database {
@@ -15,6 +16,12 @@ class Database {
       dialect: 'mysql',
       logging: false
     });
+
+    this.initializeModels();
+  }
+
+  private initializeModels() {
+    UserModel(this.sequelize);
   }
 
   public async connect() {
