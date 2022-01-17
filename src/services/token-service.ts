@@ -20,11 +20,11 @@ export class TokenService {
     }
   }
 
-  getAccessToken(userId: string) {
-    return { accessToken: jwt.sign({ userId }, this.accessTokenCredentials.secret, { expiresIn: this.accessTokenCredentials.expiresIn }) }
+  getAccessToken(userId: string): string {
+    return jwt.sign({ userId }, this.accessTokenCredentials.secret, { expiresIn: this.accessTokenCredentials.expiresIn });
   }
   
-  async getRefreshToken(userId: string) {
+  async getRefreshToken(userId: string): Promise<string> {
     const refreshToken = jwt.sign({ userId }, this.refreshTokenCredentials.secret, { expiresIn: this.refreshTokenCredentials.expiresIn });
     let tokenInDb: UserToken;
     
@@ -60,13 +60,31 @@ export class TokenService {
     return refreshToken;
   }
 
-  verifyAccessToken(accessToken: string) {
+  verifyAccessToken(accessToken: string): object {
     try {
-      const decodedToken = jwt.verify(accessToken, this.accessTokenCredentials.secret);
-      return decodedToken;
+      const verifiedToken = jwt.verify(accessToken, this.accessTokenCredentials.secret);
+      return verifiedToken;
     } catch (err) {
       console.error('jsonwebtoken ERROR in TokenService verifyAccessToken() jwt.verify(): ', err);
       throw err;
     }
+  }
+
+  async verifyRefreshToken(refreshToken: string, userId: string): Promise<boolean> {
+    let userToken: UserToken;
+    let isTokenValid: boolean;
+
+    try {
+      userToken = await UserToken.findOne({ where: { userId }});
+    } catch (err) {
+      
+    }
+    try {
+      isTokenValid = await userToken.verifyToken(refreshToken);
+    } catch (err) {
+
+    }
+    
+    return isTokenValid;
   }
 }
