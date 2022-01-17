@@ -1,6 +1,8 @@
 import { Sequelize } from 'sequelize';
 import { Service } from 'typedi';
+
 import { UserModel } from './user-model';
+import { UserTokenModel } from './user-token-model';
 
 @Service()
 class Database {
@@ -22,6 +24,7 @@ class Database {
 
   private initializeModels() {
     UserModel(this.sequelize);
+    UserTokenModel(this.sequelize);
   }
 
   public async connect() {
