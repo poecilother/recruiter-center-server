@@ -14,9 +14,9 @@ interface UserModelInstance extends Optional<UserModelAttribute, 'id'> {}
 export class User extends Model<UserModelAttribute, UserModelInstance> {
   readonly id: string;
   readonly email: string;
-  readonly password: string;
-  readonly status?: number;
-  readonly lastLogin?: Date;
+  password: string;
+  status?: number;
+  lastLogin?: Date;
 
   readonly createdAt: Date;
   readonly updatedAt: Date;
@@ -48,7 +48,7 @@ export function UserModel(sequelize: Sequelize) {
     },
     lastLogin: {
       type: DataTypes.DATE,
-      defaultValue: new Date(null)
+      defaultValue: new Date(0)
     }
   }, {
     sequelize,

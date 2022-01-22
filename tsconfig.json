@@ -6,6 +6,8 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
     "outDir": "dist",
     "baseUrl": ".",
     "emitDecoratorMetadata": true,

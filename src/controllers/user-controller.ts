@@ -10,27 +10,27 @@ export class UserController {
     this.loginUser = this.loginUser.bind(this);
   }
 
-  public async registerUser(req: Request, res: Response) {
+  public async registerUser(req: Request, res: Response): Promise<Response> {
     const { user } = req.body;
     
     try {
       const registeredUser = await this.userService.registerUser(user);
       return res.status(ResponseStatus.CREATED).send(registeredUser);
     } catch (err) {
-      console.error('ERROR in UserContoller registerUser(): ', err);
+      console.error(err);
       return res.status(ResponseStatus.INTERNAL_SERVER).send(ResponseMessage.general.error);
     }
   }
 
-  public async loginUser(req: Request, res: Response) {
+  public async loginUser(req: Request, res: Response): Promise<Response> {
     const { user } = req.body;
 
     try {
-      const loggedUser = await this.userService.loginUser(user);
-      if (!loggedUser) return res.status(ResponseStatus.BAD_REQUEST).send(ResponseMessage.general.wrongCredentials);
-      return res.status(ResponseStatus.OK).send(loggedUser);
+      const resultObject = await this.userService.loginUser(user);
+      if (!resultObject) return res.status(ResponseStatus.BAD_REQUEST).send(ResponseMessage.general.wrongCredentials);
+      return res.status(ResponseStatus.OK).send(resultObject);
     } catch (err) {
-      console.error('ERROR in UserContoller registerUser(): ', err);
+      console.error(err);
       return res.status(ResponseStatus.INTERNAL_SERVER).send(ResponseMessage.general.error);
     }
   }

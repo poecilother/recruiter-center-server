@@ -14,9 +14,10 @@ class Database {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
+      port: parseInt(process.env.DB_PORT || '3306'),
       dialect: 'mysql',
-      logging: false
+      logging: false,
+      timezone: '+01:00'
     });
 
     this.initializeModels();

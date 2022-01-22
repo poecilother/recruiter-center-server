@@ -5,15 +5,14 @@ import AppRouter from './routes';
 
 class App {
   private app: express.Application;
-  private port: number;
   private database: Database;
   private appRouter: AppRouter;
 
-  constructor(port: number) {
+  constructor(private port: number) {
     this.app = express();
     this.port = port;
     this.database = Container.get(Database);
-    this.appRouter = Container.get(AppRouter)
+    this.appRouter = Container.get(AppRouter);
 
     this.connectToDatabase(this.database);
     this.runMiddleware();
